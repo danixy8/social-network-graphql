@@ -1,28 +1,11 @@
 import express, { Application } from 'express';
-import {ApolloServer, Config, gql} from 'apollo-server-express';
-import { IResolvers } from '@graphql-tools/utils';
+import {ApolloServer} from 'apollo-server-express';
+import schema from './graphql/schema';
 
-const typeDefs = gql`
-  type Query {
-    message: String!
-  }
-`;
-
-const resolvers: IResolvers = {
-  Query: { 
-    message: () => 'It works'
-  }
-};
-
-const config: Config = {
-  typeDefs: typeDefs,
-  resolvers: resolvers
-};
-
-async function startApolloServer(config: Config){
+async function startApolloServer(){
   const PORT = process.env.PORT || 8080;
   const app: Application = express();
-  const server: ApolloServer = new ApolloServer(config);
+  const server: ApolloServer = new ApolloServer({schema});
 
   await server.start();
   
@@ -36,5 +19,5 @@ async function startApolloServer(config: Config){
   });
 }
 
-startApolloServer(config);
+startApolloServer();
 
